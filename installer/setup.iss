@@ -1,4 +1,4 @@
-; AudioCraft Installer Script
+﻿; AudioCraft Installer Script
 ; Compile with Inno Setup 6
 
 #define MyAppName "AudioCraft"
@@ -6,12 +6,12 @@
 #define MyAppPublisher "AudioCraft"
 #define MyAppURL "https://github.com/audiocraft"
 #define MyAppExeName "AudioCraft.exe"
-#define MyAppSource "bin\Release\net10.0-windows\win-x64\publish"
+#define MyAppSource "..\AudioCraft\bin\Release\net10.0-windows\win-x64\publish"
 
 [Setup]
 AppId={{A1B2C3D4-E5F6-7890-ABCD-EF1234567890}
 AppName={#MyAppName}
-AppVersion={#MyAppVersion}
+AppVersion=1.0.0
 AppPublisher={#MyAppPublisher}
 AppPublisherURL={#MyAppURL}
 AppSupportURL={#MyAppURL}
@@ -20,8 +20,8 @@ DefaultDirName={autopf}\{#MyAppName}
 DefaultGroupName={#MyAppName}
 AllowNoIcons=yes
 OutputDir=installer
-OutputBaseFilename=AudioCraft_Setup_{#MyAppVersion}
-SetupIconFile=Icons\app.ico
+OutputBaseFilename=AudioCraft_Setup_1.0.0
+SetupIconFile=..\AudioCraft\Icons\app.ico
 Compression=lzma2/ultra64
 SolidCompression=yes
 WizardStyle=modern
@@ -33,7 +33,6 @@ CloseApplications=force
 RestartApplications=no
 
 [Languages]
-Name: "chinesesimplified"; MessagesFile: "compiler:Languages\ChineseSimplified.isl"
 Name: "english"; MessagesFile: "compiler:Default.isl"
 
 [Tasks]
@@ -55,3 +54,8 @@ function InitializeUninstall: Boolean;
 begin
   Result := MsgBox('Are you sure you want to uninstall AudioCraft?', mbConfirmation, MB_YESNO) = IDYES;
 end;
+
+
+
+
+
