@@ -15,3 +15,6 @@ powershell -ExecutionPolicy Bypass -File build.ps1
 或者您可以直接使用发布目录中的文件，它是自包含的，无需安装 .NET 运行时即可运行。
 ~~~~
 
+
+
+<img width="1227" height="1043" alt="image" src="https://github.com/user-attachments/assets/6ae39598-9456-409d-932c-b20f20df3bbf" />
