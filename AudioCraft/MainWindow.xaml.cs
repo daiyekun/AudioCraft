@@ -25,14 +25,20 @@ namespace AudioCraft
         {
             InitializeComponent();
             lstFiles.ItemsSource = _files;
-            txtSourcePath.Text = "未设置";
-            txtOutputPath.Text = "未设置";
+            txtSourcePath.Text = "未选择目录";
+            txtOutputPath.Text = "未选择目录";
+            cmbSourceFormat.SelectedIndex = 0;
+            cmbTargetFormat.SelectedIndex = 1;
             UpdateStatus();
         }
 
         private void Window_Loaded(object sender, RoutedEventArgs e)
         {
-            Log("程序已启动，请选择源文件目录和输出目录");
+            try
+            {
+                Log("程序已启动，请选择源文件目录和输出目录");
+            }
+            catch { }
         }
 
         private void BtnChangeSource_Click(object sender, RoutedEventArgs e)
@@ -100,9 +106,10 @@ namespace AudioCraft
 
         private void BtnAddFiles_Click(object sender, RoutedEventArgs e)
         {
+            var sourceFormat = ((ComboBoxItem)cmbSourceFormat.SelectedItem).Content.ToString()!.ToLower();
             var dialog = new OpenFileDialog
             {
-                Filter = "音频文件|*.awb;*.mp3;*.wav;*.flac;*.ogg;*.aac|所有文件|*.*",
+                Filter = $"音频文件 (*.{sourceFormat})|*.{sourceFormat}|所有文件|*.*",
                 Multiselect = true
             };
             if (dialog.ShowDialog() == true)
@@ -118,7 +125,7 @@ namespace AudioCraft
             {
                 if (_files.Any(f => f.FilePath == file)) continue;
                 var ext = Path.GetExtension(file).TrimStart('.').ToUpper();
-                if (ext == sourceFormat || sourceFormat == "AWB" && ext == "AWB")
+                if (ext == sourceFormat)
                 {
                     var fi = new FileInfo(file);
                     _files.Add(new FileItem
@@ -360,9 +367,38 @@ namespace AudioCraft
                 MessageBox.Show("正在转换中，无法清空列表", "提示", MessageBoxButton.OK, MessageBoxImage.Warning);
                 return;
             }
-            _files.Clear();
-            UpdateStatus();
-            UpdateEmptyState();
+
+            if (_files.Count == 0)
+            {
+                MessageBox.Show("列表已经是空的", "提示", MessageBoxButton.OK, MessageBoxImage.Information);
+                return;
+            }
+
+            var result = MessageBox.Show($"确定要清空全部 {_files.Count} 个文件吗？", "警告", 
+                MessageBoxButton.YesNo, MessageBoxImage.Warning);
+            
+            if (result == MessageBoxResult.Yes)
+            {
+                _files.Clear();
+                UpdateStatus();
+                UpdateEmptyState();
+            }
+        }
+
+        private void BtnRemoveFile_Click(object sender, RoutedEventArgs e)
+        {
+            if (_isConverting)
+            {
+                MessageBox.Show("正在转换中，无法移除文件", "提示", MessageBoxButton.OK, MessageBoxImage.Warning);
+                return;
+            }
+            
+            if (sender is Button button && button.Tag is FileItem file)
+            {
+                _files.Remove(file);
+                UpdateStatus();
+                UpdateEmptyState();
+            }
         }
 
         private void UpdateStatus()
@@ -376,13 +412,13 @@ namespace AudioCraft
             if (_files.Count == 0)
             {
                 emptyState.Visibility = Visibility.Visible;
-                fileListContainer.Visibility = Visibility.Collapsed;
+                lstFiles.Visibility = Visibility.Collapsed;
                 btnConvert.IsEnabled = false;
             }
             else
             {
                 emptyState.Visibility = Visibility.Collapsed;
-                fileListContainer.Visibility = Visibility.Visible;
+                lstFiles.Visibility = Visibility.Visible;
                 btnConvert.IsEnabled = !_isConverting;
             }
         }
@@ -430,13 +466,51 @@ namespace AudioCraft
         }
     }
 
-    public class FileItem
+    public class FileItem : System.ComponentModel.INotifyPropertyChanged
     {
+        private string _status = string.Empty;
+        private double _progress;
+        private SolidColorBrush _statusBrush = new(Colors.Gray);
+
         public string FilePath { get; set; } = string.Empty;
         public string FileName { get; set; } = string.Empty;
         public string FileSize { get; set; } = string.Empty;
-        public string Status { get; set; } = string.Empty;
-        public SolidColorBrush StatusBrush { get; set; } = new(Colors.Gray);
-        public double Progress { get; set; }
+        
+        public string Status
+        {
+            get => _status;
+            set
+            {
+                _status = value;
+                OnPropertyChanged();
+            }
+        }
+        
+        public SolidColorBrush StatusBrush
+        {
+            get => _statusBrush;
+            set
+            {
+                _statusBrush = value;
+                OnPropertyChanged();
+            }
+        }
+        
+        public double Progress
+        {
+            get => _progress;
+            set
+            {
+                _progress = value;
+                OnPropertyChanged();
+            }
+        }
+
+        public event System.ComponentModel.PropertyChangedEventHandler? PropertyChanged;
+
+        protected void OnPropertyChanged([System.Runtime.CompilerServices.CallerMemberName] string? propertyName = null)
+        {
+            PropertyChanged?.Invoke(this, new System.ComponentModel.PropertyChangedEventArgs(propertyName));
+        }
     }
 }

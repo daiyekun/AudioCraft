@@ -5,9 +5,9 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:AudioCraft"
         mc:Ignorable="d"
-        Title="AudioCraft - 音频格式转换器" Height="800" Width="900"
+        Title="小胖子专属工具 - 音频格式转换器" Height="850" Width="900"
         WindowStartupLocation="CenterScreen"
-        Background="#1e2a3a"
+        Background="#f5f5f5"
         AllowDrop="True"
         Drop="Window_Drop"
         DragEnter="Window_DragEnter"
@@ -15,22 +15,25 @@
         Loaded="Window_Loaded">
 
     <Window.Resources>
-        <SolidColorBrush x:Key="PrimaryBrush" Color="#00d4ff"/>
-        <SolidColorBrush x:Key="SecondaryBrush" Color="#9b59b6"/>
-        <SolidColorBrush x:Key="BackgroundBrush" Color="#1e2a3a"/>
-        <SolidColorBrush x:Key="SurfaceBrush" Color="#2a3a4a"/>
-        <SolidColorBrush x:Key="TextBrush" Color="#ffffff"/>
-        <SolidColorBrush x:Key="TextSecondaryBrush" Color="#c0c0c0"/>
-        <SolidColorBrush x:Key="SuccessBrush" Color="#00ff88"/>
-        <SolidColorBrush x:Key="ErrorBrush" Color="#ff4444"/>
-        <SolidColorBrush x:Key="WarningBrush" Color="#ffaa00"/>
+        <!-- 微信绿色主题 -->
+        <SolidColorBrush x:Key="PrimaryBrush" Color="#07c160"/>
+        <SolidColorBrush x:Key="PrimaryDarkBrush" Color="#06ad56"/>
+        <SolidColorBrush x:Key="BackgroundBrush" Color="#f5f5f5"/>
+        <SolidColorBrush x:Key="SurfaceBrush" Color="#ffffff"/>
+        <SolidColorBrush x:Key="TextBrush" Color="#333333"/>
+        <SolidColorBrush x:Key="TextSecondaryBrush" Color="#999999"/>
+        <SolidColorBrush x:Key="BorderBrush" Color="#e5e5e5"/>
+        <SolidColorBrush x:Key="SuccessBrush" Color="#07c160"/>
+        <SolidColorBrush x:Key="ErrorBrush" Color="#fa5151"/>
+        <SolidColorBrush x:Key="WarningBrush" Color="#ffc300"/>
 
-        <Style x:Key="CyberButton" TargetType="Button">
+        <!-- 主按钮样式 -->
+        <Style x:Key="PrimaryButton" TargetType="Button">
             <Setter Property="Background" Value="{StaticResource PrimaryBrush}"/>
-            <Setter Property="Foreground" Value="#000000"/>
-            <Setter Property="FontWeight" Value="Bold"/>
+            <Setter Property="Foreground" Value="#ffffff"/>
+            <Setter Property="FontWeight" Value="Medium"/>
             <Setter Property="FontSize" Value="14"/>
-            <Setter Property="Padding" Value="20,12"/>
+            <Setter Property="Padding" Value="24,12"/>
             <Setter Property="BorderThickness" Value="0"/>
             <Setter Property="Cursor" Value="Hand"/>
             <Setter Property="Template">
@@ -44,11 +47,11 @@
                         </Border>
                         <ControlTemplate.Triggers>
                             <Trigger Property="IsMouseOver" Value="True">
-                                <Setter TargetName="border" Property="Background" Value="#00ffff"/>
+                                <Setter TargetName="border" Property="Background" Value="{StaticResource PrimaryDarkBrush}"/>
                             </Trigger>
                             <Trigger Property="IsEnabled" Value="False">
-                                <Setter TargetName="border" Property="Background" Value="#333333"/>
-                                <Setter Property="Foreground" Value="#666666"/>
+                                <Setter TargetName="border" Property="Background" Value="#cccccc"/>
+                                <Setter Property="Foreground" Value="#999999"/>
                             </Trigger>
                         </ControlTemplate.Triggers>
                     </ControlTemplate>
@@ -56,116 +59,30 @@
             </Setter>
         </Style>
 
-        <Style x:Key="SecondaryButton" TargetType="Button" BasedOn="{StaticResource CyberButton}">
-            <Setter Property="Background" Value="{StaticResource SecondaryBrush}"/>
-            <Setter Property="Foreground" Value="#ffffff"/>
-        </Style>
-
-        <Style x:Key="ComboBoxStyle" TargetType="ComboBox">
-            <Setter Property="Background" Value="#2a3a4a"/>
-            <Setter Property="Foreground" Value="#ffffff"/>
-            <Setter Property="FontSize" Value="14"/>
-            <Setter Property="Padding" Value="10,8"/>
-            <Setter Property="BorderBrush" Value="#00d4ff"/>
+        <!-- 次要按钮样式 -->
+        <Style x:Key="SecondaryButton" TargetType="Button">
+            <Setter Property="Background" Value="{StaticResource SurfaceBrush}"/>
+            <Setter Property="Foreground" Value="{StaticResource TextBrush}"/>
+            <Setter Property="FontWeight" Value="Normal"/>
+            <Setter Property="FontSize" Value="13"/>
+            <Setter Property="Padding" Value="16,8"/>
             <Setter Property="BorderThickness" Value="1"/>
+            <Setter Property="BorderBrush" Value="{StaticResource BorderBrush}"/>
+            <Setter Property="Cursor" Value="Hand"/>
             <Setter Property="Template">
                 <Setter.Value>
-                    <ControlTemplate TargetType="ComboBox">
-                        <Grid>
-                            <ToggleButton x:Name="toggle"
-                                          Background="{TemplateBinding Background}"
-                                          BorderBrush="{TemplateBinding BorderBrush}"
-                                          BorderThickness="{TemplateBinding BorderThickness}"
-                                          Focusable="False"
-                                          IsChecked="{Binding IsDropDownOpen, Mode=TwoWay, RelativeSource={RelativeSource TemplatedParent}}"
-                                          ClickMode="Press">
-                                <ToggleButton.Template>
-                                    <ControlTemplate TargetType="ToggleButton">
-                                        <Border Background="{TemplateBinding Background}"
-                                                BorderBrush="{TemplateBinding BorderBrush}"
-                                                BorderThickness="{TemplateBinding BorderThickness}"
-                                                CornerRadius="4">
-                                            <Grid>
-                                                <Grid.ColumnDefinitions>
-                                                    <ColumnDefinition/>
-                                                    <ColumnDefinition Width="30"/>
-                                                </Grid.ColumnDefinitions>
-                                                <Border Grid.Column="1" Background="Transparent">
-                                                    <Path x:Name="Arrow"
-                                                          Data="M 0 0 L 10 10 L 20 0"
-                                                          Stroke="#ffffff"
-                                                          StrokeThickness="2"
-                                                          Fill="Transparent"
-                                                          HorizontalAlignment="Center"
-                                                          VerticalAlignment="Center"/>
-                                                </Border>
-                                            </Grid>
-                                        </Border>
-                                    </ControlTemplate>
-                                </ToggleButton.Template>
-                            </ToggleButton>
-                            <ContentPresenter x:Name="contentSite"
-                                              Content="{TemplateBinding SelectionBoxItem}"
-                                              ContentTemplate="{TemplateBinding SelectionBoxItemTemplate}"
-                                              ContentTemplateSelector="{TemplateBinding ItemTemplateSelector}"
-                                              Margin="{TemplateBinding Padding}"
-                                              VerticalAlignment="Center"
-                                              HorizontalAlignment="Left"/>
-                            <Popup x:Name="Popup"
-                                   Placement="Bottom"
-                                   IsOpen="{TemplateBinding IsDropDownOpen}"
-                                   AllowsTransparency="True"
-                                   Focusable="False"
-                                   PopupAnimation="Slide">
-                                <Grid x:Name="dropdown"
-                                      Width="{TemplateBinding ActualWidth}"
-                                      MaxHeight="{TemplateBinding MaxDropDownHeight}"
-                                      MinWidth="{TemplateBinding ActualWidth}">
-                                    <Border x:Name="dropdownBorder"
-                                            Background="#2a3a4a"
-                                            BorderBrush="#00d4ff"
-                                            BorderThickness="1"
-                                            CornerRadius="4"/>
-                                    <ScrollViewer Margin="4"
-                                                  VerticalScrollBarVisibility="Auto"
-                                                  HorizontalScrollBarVisibility="Disabled">
-                                        <StackPanel IsItemsHost="True"
-                                                    KeyboardNavigation.DirectionalNavigation="Contained"/>
-                                    </ScrollViewer>
-                                </Grid>
-                            </Popup>
-                        </Grid>
-                    </ControlTemplate>
-                </Setter.Value>
-            </Setter>
-            <Style.Triggers>
-                <Trigger Property="IsMouseOver" Value="True">
-                    <Setter Property="BorderBrush" Value="#00ffff"/>
-                </Trigger>
-            </Style.Triggers>
-        </Style>
-
-        <Style x:Key="ComboBoxItemStyle" TargetType="ComboBoxItem">
-            <Setter Property="Background" Value="Transparent"/>
-            <Setter Property="Foreground" Value="#ffffff"/>
-            <Setter Property="Padding" Value="10,8"/>
-            <Setter Property="Template">
-                <Setter.Value>
-                    <ControlTemplate TargetType="ComboBoxItem">
-                        <Border x:Name="border"
-                                Background="{TemplateBinding Background}"
-                                Padding="{TemplateBinding Padding}"
-                                CornerRadius="2">
-                            <ContentPresenter/>
+                    <ControlTemplate TargetType="Button">
+                        <Border x:Name="border" 
+                                Background="{TemplateBinding Background}" 
+                                BorderBrush="{TemplateBinding BorderBrush}"
+                                BorderThickness="{TemplateBinding BorderThickness}"
+                                CornerRadius="4"
+                                Padding="{TemplateBinding Padding}">
+                            <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
                         </Border>
                         <ControlTemplate.Triggers>
-                            <Trigger Property="IsHighlighted" Value="True">
-                                <Setter TargetName="border" Property="Background" Value="#00d4ff"/>
-                                <Setter Property="Foreground" Value="#000000"/>
-                            </Trigger>
-                            <Trigger Property="IsSelected" Value="True">
-                                <Setter TargetName="border" Property="Background" Value="#00a0cc"/>
-                                <Setter Property="Foreground" Value="#000000"/>
+                            <Trigger Property="IsMouseOver" Value="True">
+                                <Setter TargetName="border" Property="Background" Value="#f0f0f0"/>
                             </Trigger>
                         </ControlTemplate.Triggers>
                     </ControlTemplate>
@@ -173,14 +90,25 @@
             </Setter>
         </Style>
 
-        <Style x:Key="CyberGroupBox" TargetType="GroupBox">
-            <Setter Property="BorderBrush" Value="#4a5a6a"/>
+        <!-- 下拉框样式 -->
+        <Style x:Key="ComboBoxStyle" TargetType="ComboBox">
+            <Setter Property="Background" Value="{StaticResource SurfaceBrush}"/>
+            <Setter Property="Foreground" Value="{StaticResource TextBrush}"/>
+            <Setter Property="FontSize" Value="14"/>
+            <Setter Property="Padding" Value="12,8"/>
+            <Setter Property="BorderBrush" Value="{StaticResource BorderBrush}"/>
             <Setter Property="BorderThickness" Value="1"/>
-            <Setter Property="Foreground" Value="#00d4ff"/>
-            <Setter Property="FontSize" Value="13"/>
-            <Setter Property="FontWeight" Value="Bold"/>
-            <Setter Property="Padding" Value="10"/>
-            <Setter Property="Margin" Value="0,0,0,10"/>
+        </Style>
+
+        <!-- GroupBox样式 -->
+        <Style x:Key="CardGroupBox" TargetType="GroupBox">
+            <Setter Property="BorderBrush" Value="{StaticResource BorderBrush}"/>
+            <Setter Property="BorderThickness" Value="1"/>
+            <Setter Property="Foreground" Value="{StaticResource TextBrush}"/>
+            <Setter Property="FontSize" Value="14"/>
+            <Setter Property="FontWeight" Value="SemiBold"/>
+            <Setter Property="Padding" Value="16"/>
+            <Setter Property="Margin" Value="0,0,0,16"/>
             <Setter Property="Template">
                 <Setter.Value>
                     <ControlTemplate TargetType="GroupBox">
@@ -190,16 +118,18 @@
                                 <RowDefinition Height="*"/>
                             </Grid.RowDefinitions>
                             <Border Grid.Row="0" 
-                                    Background="#2a3a4a" 
-                                    CornerRadius="6,6,0,0" 
-                                    Padding="12,8">
+                                    Background="{StaticResource SurfaceBrush}" 
+                                    CornerRadius="8,8,0,0" 
+                                    Padding="16,12"
+                                    BorderBrush="{TemplateBinding BorderBrush}"
+                                    BorderThickness="1,1,1,0">
                                 <ContentPresenter ContentSource="Header"/>
                             </Border>
                             <Border Grid.Row="1" 
-                                    Background="#2a3a4a" 
-                                    CornerRadius="0,0,6,6" 
+                                    Background="{StaticResource SurfaceBrush}" 
+                                    CornerRadius="0,0,8,8" 
                                     BorderBrush="{TemplateBinding BorderBrush}"
-                                    BorderThickness="{TemplateBinding BorderThickness}"
+                                    BorderThickness="1,0,1,1"
                                     Padding="{TemplateBinding Padding}">
                                 <ContentPresenter/>
                             </Border>
@@ -218,7 +148,7 @@
         </Grid.RowDefinitions>
 
         <!-- Header -->
-        <Border Grid.Row="0" Background="{StaticResource SurfaceBrush}" Padding="20,15">
+        <Border Grid.Row="0" Background="{StaticResource SurfaceBrush}" Padding="24,16" BorderBrush="{StaticResource BorderBrush}" BorderThickness="0,0,0,1">
             <Grid>
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="Auto"/>
@@ -227,25 +157,25 @@
                 </Grid.ColumnDefinitions>
 
                 <StackPanel Grid.Column="0" VerticalAlignment="Center">
-                    <TextBlock Text="AudioCraft" 
-                               FontSize="28" 
-                               FontWeight="Bold" 
+                    <TextBlock Text="小胖子专属工具" 
+                               FontSize="22" 
+                               FontWeight="SemiBold" 
                                Foreground="{StaticResource PrimaryBrush}"/>
-                    <TextBlock Text="音频格式转换器" 
+                    <TextBlock Text="音频格式转换工具" 
                                FontSize="12" 
-                               Foreground="{StaticResource TextSecondaryBrush}"/>
+                               Foreground="{StaticResource TextSecondaryBrush}"
+                               Margin="0,2,0,0"/>
                 </StackPanel>
 
                 <StackPanel Grid.Column="2" Orientation="Horizontal" VerticalAlignment="Center">
-                    <TextBlock Text="格式选择：" 
+                    <TextBlock Text="格式：" 
                                Foreground="{StaticResource TextSecondaryBrush}" 
                                VerticalAlignment="Center" 
-                               Margin="0,0,10,0"/>
+                               Margin="0,0,8,0"/>
                     <ComboBox x:Name="cmbSourceFormat" 
-                              Style="{StaticResource ComboBoxStyle}" 
-                              ItemContainerStyle="{StaticResource ComboBoxItemStyle}"
-                              Width="100" 
-                              Margin="0,0,10,0"
+                              Style="{StaticResource ComboBoxStyle}"
+                              Width="90" 
+                              Margin="0,0,8,0"
                               SelectedIndex="0">
                         <ComboBoxItem Content="AWB"/>
                         <ComboBoxItem Content="WAV"/>
@@ -253,18 +183,17 @@
                         <ComboBoxItem Content="OGG"/>
                     </ComboBox>
                     <TextBlock Text="→" 
-                               Foreground="{StaticResource PrimaryBrush}" 
-                               FontSize="20" 
+                               Foreground="{StaticResource TextSecondaryBrush}" 
+                               FontSize="16" 
                                VerticalAlignment="Center" 
-                               Margin="5,0"/>
+                               Margin="4,0"/>
                     <ComboBox x:Name="cmbTargetFormat" 
-                              Style="{StaticResource ComboBoxStyle}" 
-                              ItemContainerStyle="{StaticResource ComboBoxItemStyle}"
-                              Width="100" 
-                              Margin="10,0,0,0"
+                              Style="{StaticResource ComboBoxStyle}"
+                              Width="90" 
+                              Margin="8,0,0,0"
                               SelectedIndex="1">
-                        <ComboBoxItem Content="MP3"/>
                         <ComboBoxItem Content="WAV"/>
+                        <ComboBoxItem Content="MP3"/>
                         <ComboBoxItem Content="FLAC"/>
                         <ComboBoxItem Content="AAC"/>
                     </ComboBox>
@@ -276,100 +205,167 @@
         <Grid Grid.Row="1" Margin="20">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="*"/>
-                <ColumnDefinition Width="Auto"/>
+                <ColumnDefinition Width="260"/>
             </Grid.ColumnDefinitions>
 
             <!-- Drop Zone / File List -->
             <Border Grid.Column="0" 
                     x:Name="dropZone"
                     Background="{StaticResource SurfaceBrush}" 
-                    CornerRadius="10"
-                    BorderThickness="2"
-                    BorderBrush="#4a5a6a"
-                    Padding="15">
+                    CornerRadius="8"
+                    BorderThickness="1"
+                    BorderBrush="{StaticResource BorderBrush}"
+                    Margin="0,0,16,0">
                 <Grid>
                     <!-- Empty State -->
                     <StackPanel x:Name="emptyState" 
                                 VerticalAlignment="Center" 
                                 HorizontalAlignment="Center"
                                 Visibility="Visible">
-                        <TextBlock Text="📁" FontSize="60" HorizontalAlignment="Center" Margin="0,0,0,15"/>
+                        <TextBlock Text="📂" FontSize="48" HorizontalAlignment="Center" Margin="0,0,0,16"/>
                         <TextBlock Text="拖拽音频文件到此处" 
-                                   FontSize="20" 
+                                   FontSize="16" 
                                    Foreground="{StaticResource TextBrush}" 
                                    HorizontalAlignment="Center"/>
-                        <TextBlock Text="或点击下方按钮添加文件" 
-                                   FontSize="14" 
+                        <TextBlock Text="支持 AWB、WAV、FLAC、OGG 格式" 
+                                   FontSize="13" 
                                    Foreground="{StaticResource TextSecondaryBrush}" 
                                    HorizontalAlignment="Center" 
-                                   Margin="0,8,0,0"/>
+                                   Margin="0,6,0,0"/>
                     </StackPanel>
 
                     <!-- File List -->
-                    <Grid x:Name="fileListContainer" Visibility="Collapsed">
-                        <Grid.RowDefinitions>
-                            <RowDefinition Height="Auto"/>
-                            <RowDefinition Height="*"/>
-                        </Grid.RowDefinitions>
-
-                        <Border Grid.Row="0" Padding="10,8" Background="#222244" CornerRadius="6,6,0,0">
-                            <Grid>
-                                <Grid.ColumnDefinitions>
-                                    <ColumnDefinition Width="*"/>
-                                    <ColumnDefinition Width="120"/>
-                                    <ColumnDefinition Width="120"/>
-                                    <ColumnDefinition Width="80"/>
-                                </Grid.ColumnDefinitions>
-                                <TextBlock Text="文件名" Foreground="{StaticResource TextSecondaryBrush}" FontWeight="Bold"/>
-                                <TextBlock Grid.Column="1" Text="大小" Foreground="{StaticResource TextSecondaryBrush}" FontWeight="Bold"/>
-                                <TextBlock Grid.Column="2" Text="状态" Foreground="{StaticResource TextSecondaryBrush}" FontWeight="Bold"/>
-                                <TextBlock Grid.Column="3" Text="进度" Foreground="{StaticResource TextSecondaryBrush}" FontWeight="Bold"/>
-                            </Grid>
-                        </Border>
-
-                        <ListBox x:Name="lstFiles" 
-                                 Grid.Row="1" 
-                                 Background="Transparent" 
-                                 BorderThickness="0"
-                                 ScrollViewer.HorizontalScrollBarVisibility="Disabled">
-                            <ListBox.ItemTemplate>
-                                <DataTemplate>
-                                    <Border Padding="10,8" BorderBrush="#333366" BorderThickness="0,0,0,1">
-                                        <Grid>
-                                            <Grid.ColumnDefinitions>
-                                                <ColumnDefinition Width="*"/>
-                                                <ColumnDefinition Width="120"/>
-                                                <ColumnDefinition Width="120"/>
-                                                <ColumnDefinition Width="80"/>
-                                            </Grid.ColumnDefinitions>
-                                            <TextBlock Text="{Binding FileName}" Foreground="{StaticResource TextBrush}" TextTrimming="CharacterEllipsis"/>
-                                            <TextBlock Grid.Column="1" Text="{Binding FileSize}" Foreground="{StaticResource TextSecondaryBrush}"/>
-                                            <TextBlock Grid.Column="2" Text="{Binding Status}" Foreground="{Binding StatusBrush}"/>
-                                            <ProgressBar Grid.Column="3" 
-                                                         Value="{Binding Progress}" 
-                                                         Maximum="100" 
-                                                         Height="16"
-                                                         Background="#333366"
-                                                         Foreground="{StaticResource PrimaryBrush}"/>
-                                        </Grid>
-                                    </Border>
-                                </DataTemplate>
-                            </ListBox.ItemTemplate>
-                        </ListBox>
-                    </Grid>
+                    <ListView x:Name="lstFiles" 
+                              Grid.Row="1" 
+                              Background="Transparent" 
+                              BorderThickness="0"
+                              ScrollViewer.HorizontalScrollBarVisibility="Disabled"
+                              Visibility="Collapsed"
+                              BorderBrush="{StaticResource BorderBrush}">
+                        <ListView.View>
+                            <GridView>
+                                <GridView.ColumnHeaderContainerStyle>
+                                    <Style TargetType="GridViewColumnHeader">
+                                        <Setter Property="Background" Value="#fafafa"/>
+                                        <Setter Property="Foreground" Value="{StaticResource TextSecondaryBrush}"/>
+                                        <Setter Property="BorderThickness" Value="0,0,0,1"/>
+                                        <Setter Property="BorderBrush" Value="{StaticResource BorderBrush}"/>
+                                        <Setter Property="Padding" Value="16,10"/>
+                                        <Setter Property="FontSize" Value="13"/>
+                                        <Setter Property="Template">
+                                            <Setter.Value>
+                                                <ControlTemplate TargetType="GridViewColumnHeader">
+                                                    <Border Background="{TemplateBinding Background}"
+                                                            BorderBrush="{TemplateBinding BorderBrush}"
+                                                            BorderThickness="{TemplateBinding BorderThickness}"
+                                                            Padding="{TemplateBinding Padding}">
+                                                        <ContentPresenter/>
+                                                    </Border>
+                                                </ControlTemplate>
+                                            </Setter.Value>
+                                        </Setter>
+                                    </Style>
+                                </GridView.ColumnHeaderContainerStyle>
+                                <GridViewColumn Header="文件名" Width="300">
+                                    <GridViewColumn.CellTemplate>
+                                        <DataTemplate>
+                                            <TextBlock Text="{Binding FileName}" 
+                                                       Foreground="{StaticResource TextBrush}" 
+                                                       TextTrimming="CharacterEllipsis" 
+                                                       FontSize="13"
+                                                       Margin="0,6"/>
+                                        </DataTemplate>
+                                    </GridViewColumn.CellTemplate>
+                                </GridViewColumn>
+                                <GridViewColumn Header="大小" Width="80">
+                                    <GridViewColumn.CellTemplate>
+                                        <DataTemplate>
+                                            <TextBlock Text="{Binding FileSize}" 
+                                                       Foreground="{StaticResource TextSecondaryBrush}" 
+                                                       FontSize="13"
+                                                       Margin="0,6"/>
+                                        </DataTemplate>
+                                    </GridViewColumn.CellTemplate>
+                                </GridViewColumn>
+                                <GridViewColumn Header="状态" Width="100">
+                                    <GridViewColumn.CellTemplate>
+                                        <DataTemplate>
+                                            <TextBlock Text="{Binding Status}" 
+                                                       Foreground="{Binding StatusBrush}" 
+                                                       FontSize="13"
+                                                       Margin="0,6"/>
+                                        </DataTemplate>
+                                    </GridViewColumn.CellTemplate>
+                                </GridViewColumn>
+                                <GridViewColumn Header="进度" Width="150">
+                                    <GridViewColumn.CellTemplate>
+                                        <DataTemplate>
+                                            <StackPanel Margin="0,6,8,6">
+                                                <ProgressBar Value="{Binding Progress}" 
+                                                             Maximum="100" 
+                                                             Height="6"
+                                                             Background="#e5e5e5"
+                                                             Foreground="{StaticResource PrimaryBrush}"/>
+                                                <TextBlock Text="{Binding Progress, StringFormat={}{0:0}%}" 
+                                                           HorizontalAlignment="Right"
+                                                           FontSize="11"
+                                                           Foreground="{StaticResource TextSecondaryBrush}"/>
+                                            </StackPanel>
+                                        </DataTemplate>
+                                    </GridViewColumn.CellTemplate>
+                                </GridViewColumn>
+                                <GridViewColumn Header="操作" Width="60">
+                                    <GridViewColumn.CellTemplate>
+                                        <DataTemplate>
+                                            <Button Content="×"
+                                                    FontSize="16"
+                                                    Foreground="{StaticResource ErrorBrush}"
+                                                    Background="Transparent"
+                                                    BorderThickness="0"
+                                                    Cursor="Hand"
+                                                    Click="BtnRemoveFile_Click"
+                                                    Tag="{Binding}"
+                                                    Padding="4,0">
+                                                <Button.Style>
+                                                    <Style TargetType="Button">
+                                                        <Setter Property="Template">
+                                                            <Setter.Value>
+                                                                <ControlTemplate TargetType="Button">
+                                                                    <Border x:Name="border" Background="Transparent" CornerRadius="4" Padding="8,4">
+                                                                        <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                                                                    </Border>
+                                                                    <ControlTemplate.Triggers>
+                                                                        <Trigger Property="IsMouseOver" Value="True">
+                                                                            <Setter TargetName="border" Property="Background" Value="#ffe5e5"/>
+                                                                        </Trigger>
+                                                                    </ControlTemplate.Triggers>
+                                                                </ControlTemplate>
+                                                            </Setter.Value>
+                                                        </Setter>
+                                                    </Style>
+                                                </Button.Style>
+                                            </Button>
+                                        </DataTemplate>
+                                    </GridViewColumn.CellTemplate>
+                                </GridViewColumn>
+                            </GridView>
+                        </ListView.View>
+                    </ListView>
 
                     <!-- Drag Overlay -->
                     <Border x:Name="dragOverlay" 
-                            Background="#4400d4ff" 
-                            CornerRadius="10" 
+                            Background="#2007c160" 
+                            CornerRadius="8" 
                             Visibility="Collapsed"
+                            BorderThickness="2"
+                            BorderBrush="{StaticResource PrimaryBrush}"
                             HorizontalAlignment="Stretch"
                             VerticalAlignment="Stretch">
                         <StackPanel VerticalAlignment="Center" HorizontalAlignment="Center">
-                            <TextBlock Text="释放以添加文件" 
-                                       FontSize="24" 
+                            <TextBlock Text="松开鼠标添加文件" 
+                                       FontSize="18" 
                                        Foreground="{StaticResource PrimaryBrush}" 
-                                       FontWeight="Bold"
+                                       FontWeight="SemiBold"
                                        HorizontalAlignment="Center"/>
                         </StackPanel>
                     </Border>
@@ -377,134 +373,159 @@
             </Border>
 
             <!-- Right Panel -->
-            <Grid Grid.Column="1" Margin="20,0,0,0" Width="220">
-                <Grid.RowDefinitions>
-                    <RowDefinition Height="Auto"/>
-                    <RowDefinition Height="Auto"/>
-                    <RowDefinition Height="Auto"/>
-                    <RowDefinition Height="*"/>
-                    <RowDefinition Height="Auto"/>
-                </Grid.RowDefinitions>
-
-                <!-- Add Files Button -->
-                <Button Grid.Row="0" 
-                        Style="{StaticResource CyberButton}" 
-                        Click="BtnAddFiles_Click"
-                        Margin="0,0,0,10">
-                    <StackPanel Orientation="Horizontal">
-                        <TextBlock Text="+" FontSize="18" FontWeight="Bold" Margin="0,0,8,0"/>
-                        <TextBlock Text="添加文件"/>
-                    </StackPanel>
-                </Button>
-
-                <!-- Source Folder Group -->
-                <GroupBox Grid.Row="1" 
-                          Header="原始文件目录" 
-                          Style="{StaticResource CyberGroupBox}">
-                    <StackPanel>
-                        <TextBlock x:Name="txtSourcePath" 
-                                   Text="未设置" 
-                                   Foreground="{StaticResource TextBrush}" 
-                                   TextTrimming="CharacterEllipsis"
-                                   Margin="0,0,0,8"/>
+            <ScrollViewer Grid.Column="1" 
+                          Width="260"
+                          VerticalScrollBarVisibility="Auto"
+                          HorizontalScrollBarVisibility="Disabled">
+                <StackPanel>
+                    <!-- Add Files Button -->
+                    <Button Style="{StaticResource PrimaryButton}" 
+                            Click="BtnAddFiles_Click"
+                            Margin="0,0,0,16">
                         <StackPanel Orientation="Horizontal">
-                            <Button Style="{StaticResource SecondaryButton}" 
-                                    Click="BtnChangeSource_Click"
-                                    Padding="10,8"
-                                    FontSize="12"
-                                    Margin="0,0,8,0">
-                                <TextBlock Text="选择目录"/>
-                            </Button>
-                            <Button Style="{StaticResource SecondaryButton}" 
-                                    Click="BtnLoadSource_Click"
-                                    Padding="10,8"
-                                    FontSize="12">
-                                <TextBlock Text="加载文件"/>
-                            </Button>
+                            <TextBlock Text="+" FontSize="16" FontWeight="Bold" Margin="0,0,6,0"/>
+                            <TextBlock Text="添加文件"/>
                         </StackPanel>
-                    </StackPanel>
-                </GroupBox>
+                    </Button>
 
-                <!-- Output Folder Group -->
-                <GroupBox Grid.Row="2" 
-                          Header="目标目录" 
-                          Style="{StaticResource CyberGroupBox}">
-                    <StackPanel>
-                        <TextBlock x:Name="txtOutputPath" 
-                                   Text="未设置" 
-                                   Foreground="{StaticResource TextBrush}" 
-                                   TextTrimming="CharacterEllipsis"
-                                   Margin="0,0,0,8"/>
-                        <StackPanel Orientation="Horizontal">
-                            <Button Style="{StaticResource SecondaryButton}" 
-                                    Click="BtnChangeOutput_Click"
-                                    Padding="10,8"
-                                    FontSize="12"
-                                    Margin="0,0,8,0">
-                                <TextBlock Text="另存为"/>
-                            </Button>
-                            <Button Style="{StaticResource SecondaryButton}" 
-                                    Click="BtnOpenOutput_Click"
-                                    Padding="10,8"
-                                    FontSize="12">
-                                <TextBlock Text="打开目录"/>
-                            </Button>
+                    <!-- Source Folder Group -->
+                    <GroupBox Header="原始文件目录" 
+                              Style="{StaticResource CardGroupBox}">
+                        <StackPanel>
+                            <TextBlock x:Name="txtSourcePath" 
+                                       Text="未选择目录" 
+                                       Foreground="{StaticResource TextSecondaryBrush}" 
+                                       TextTrimming="CharacterEllipsis"
+                                       FontSize="13"
+                                       Margin="0,0,0,12"
+                                       ToolTip="{Binding Text, RelativeSource={RelativeSource Self}}"/>
+                            <StackPanel Orientation="Horizontal">
+                                <Button Style="{StaticResource SecondaryButton}" 
+                                        Click="BtnChangeSource_Click"
+                                        Margin="0,0,8,0">
+                                    <TextBlock Text="选择目录" FontSize="13"/>
+                                </Button>
+                                <Button Style="{StaticResource SecondaryButton}" 
+                                        Click="BtnLoadSource_Click">
+                                    <TextBlock Text="加载文件" FontSize="13"/>
+                                </Button>
+                            </StackPanel>
                         </StackPanel>
-                    </StackPanel>
-                </GroupBox>
+                    </GroupBox>
 
-                <!-- Convert Button -->
-                <Button Grid.Row="3" 
-                        x:Name="btnConvert"
-                        Style="{StaticResource CyberButton}" 
-                        Click="BtnConvert_Click"
-                        IsEnabled="False"
-                        Margin="0,0,0,10">
-                    <StackPanel Orientation="Horizontal">
-                        <TextBlock Text="▶" FontSize="16" Margin="0,0,8,0"/>
-                        <TextBlock Text="开始转换"/>
-                    </StackPanel>
-                </Button>
+                    <!-- Output Folder Group -->
+                    <GroupBox Header="目标目录" 
+                              Style="{StaticResource CardGroupBox}">
+                        <StackPanel>
+                            <TextBlock x:Name="txtOutputPath" 
+                                       Text="未选择目录" 
+                                       Foreground="{StaticResource TextSecondaryBrush}" 
+                                       TextTrimming="CharacterEllipsis"
+                                       FontSize="13"
+                                       Margin="0,0,0,12"
+                                       ToolTip="{Binding Text, RelativeSource={RelativeSource Self}}"/>
+                            <StackPanel Orientation="Horizontal">
+                                <Button Style="{StaticResource SecondaryButton}" 
+                                        Click="BtnChangeOutput_Click"
+                                        Margin="0,0,8,0">
+                                    <TextBlock Text="另存为" FontSize="13"/>
+                                </Button>
+                                <Button Style="{StaticResource SecondaryButton}" 
+                                        Click="BtnOpenOutput_Click">
+                                    <TextBlock Text="打开目录" FontSize="13"/>
+                                </Button>
+                            </StackPanel>
+                        </StackPanel>
+                    </GroupBox>
 
-                <!-- Log Panel -->
-                <Border Grid.Row="4" 
-                        Background="{StaticResource SurfaceBrush}" 
-                        CornerRadius="8" 
-                        Padding="12">
-                    <Grid>
-                        <Grid.RowDefinitions>
-                            <RowDefinition Height="Auto"/>
-                            <RowDefinition Height="*"/>
-                        </Grid.RowDefinitions>
-                        <TextBlock Text="转换日志" Foreground="{StaticResource TextSecondaryBrush}" FontSize="12" Margin="0,0,0,8"/>
-                        <ScrollViewer x:Name="logScroller" VerticalScrollBarVisibility="Auto">
-                            <TextBox x:Name="txtLog" 
-                                     Background="Transparent" 
-                                     Foreground="{StaticResource TextBrush}"
-                                     BorderThickness="0"
-                                     IsReadOnly="True"
-                                     TextWrapping="Wrap"
-                                     FontFamily="Consolas"
-                                     FontSize="11"/>
-                        </ScrollViewer>
+                    <!-- Convert and Clear Buttons -->
+                    <Grid Margin="0,0,0,16">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="Auto"/>
+                        </Grid.ColumnDefinitions>
+                        <Button x:Name="btnConvert"
+                                Grid.Column="0"
+                                Style="{StaticResource PrimaryButton}" 
+                                Click="BtnConvert_Click"
+                                IsEnabled="False"
+                                Height="44"
+                                Margin="0,0,8,0">
+                            <StackPanel Orientation="Horizontal">
+                                <TextBlock Text="▶" FontSize="14" Margin="0,0,8,0"/>
+                                <TextBlock Text="开始转换" FontSize="15"/>
+                            </StackPanel>
+                        </Button>
+                        <Button Grid.Column="1"
+                                Click="BtnClear_Click"
+                                Height="44"
+                                Padding="16,0"
+                                Cursor="Hand"
+                                VerticalContentAlignment="Center">
+                            <Button.Style>
+                                <Style TargetType="Button">
+                                    <Setter Property="Template">
+                                        <Setter.Value>
+                                            <ControlTemplate TargetType="Button">
+                                                <Border x:Name="border" 
+                                                        Background="#ff9800" 
+                                                        CornerRadius="6"
+                                                        Padding="{TemplateBinding Padding}">
+                                                    <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                                                </Border>
+                                                <ControlTemplate.Triggers>
+                                                    <Trigger Property="IsMouseOver" Value="True">
+                                                        <Setter TargetName="border" Property="Background" Value="#e68a00"/>
+                                                    </Trigger>
+                                                    <Trigger Property="IsEnabled" Value="False">
+                                                        <Setter TargetName="border" Property="Background" Value="#cccccc"/>
+                                                    </Trigger>
+                                                </ControlTemplate.Triggers>
+                                            </ControlTemplate>
+                                        </Setter.Value>
+                                    </Setter>
+                                </Style>
+                            </Button.Style>
+                            <TextBlock Text="清空" 
+                                       Foreground="#ffffff" 
+                                       FontSize="14" 
+                                       FontWeight="SemiBold"/>
+                        </Button>
                     </Grid>
-                </Border>
 
-                <!-- Clear Button -->
-                <Button Grid.Row="5" 
-                        Style="{StaticResource SecondaryButton}" 
-                        Background="#444444"
-                        Click="BtnClear_Click"
-                        Margin="0,10,0,0"
-                        Padding="12,6"
-                        FontSize="12">
-                    <TextBlock Text="清空列表"/>
-                </Button>
-            </Grid>
+                    <!-- Log Panel -->
+                    <Border Background="{StaticResource SurfaceBrush}" 
+                            CornerRadius="8" 
+                            BorderThickness="1"
+                            BorderBrush="{StaticResource BorderBrush}"
+                            Padding="0"
+                            Height="200">
+                        <Grid>
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="Auto"/>
+                                <RowDefinition Height="*"/>
+                            </Grid.RowDefinitions>
+                            <Border Grid.Row="0" Padding="12,10" Background="#fafafa" BorderBrush="{StaticResource BorderBrush}" BorderThickness="0,0,0,1" CornerRadius="8,8,0,0">
+                                <TextBlock Text="转换日志" Foreground="{StaticResource TextSecondaryBrush}" FontSize="12"/>
+                            </Border>
+                            <ScrollViewer x:Name="logScroller" Grid.Row="1" VerticalScrollBarVisibility="Auto" Padding="12,8">
+                                <TextBox x:Name="txtLog" 
+                                         Background="Transparent" 
+                                         Foreground="{StaticResource TextSecondaryBrush}"
+                                         BorderThickness="0"
+                                         IsReadOnly="True"
+                                         TextWrapping="Wrap"
+                                         FontFamily="Microsoft YaHei"
+                                         FontSize="12"/>
+                            </ScrollViewer>
+                        </Grid>
+                    </Border>
+                </StackPanel>
+            </ScrollViewer>
         </Grid>
 
         <!-- Status Bar -->
-        <Border Grid.Row="2" Background="{StaticResource SurfaceBrush}" Padding="15,10">
+        <Border Grid.Row="2" Background="{StaticResource SurfaceBrush}" Padding="20,10" BorderBrush="{StaticResource BorderBrush}" BorderThickness="0,1,0,0">
             <Grid>
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="*"/>
@@ -512,11 +533,13 @@
                 </Grid.ColumnDefinitions>
                 <TextBlock x:Name="txtStatus" 
                            Text="就绪" 
-                           Foreground="{StaticResource TextSecondaryBrush}"/>
+                           Foreground="{StaticResource TextSecondaryBrush}"
+                           FontSize="12"/>
                 <TextBlock Grid.Column="1" 
                            x:Name="txtFileCount" 
                            Text="0 个文件" 
-                           Foreground="{StaticResource TextSecondaryBrush}"/>
+                           Foreground="{StaticResource TextSecondaryBrush}"
+                           FontSize="12"/>
             </Grid>
         </Border>
     </Grid>
