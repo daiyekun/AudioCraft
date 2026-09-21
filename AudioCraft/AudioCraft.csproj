@@ -9,6 +9,14 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <None Remove="app.png" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Resource Include="app.png" />
+  </ItemGroup>
+
+  <ItemGroup>
     <None Update="tools\**\*">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>

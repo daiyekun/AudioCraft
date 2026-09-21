@@ -12,7 +12,7 @@
         Drop="Window_Drop"
         DragEnter="Window_DragEnter"
         DragLeave="Window_DragLeave"
-        Loaded="Window_Loaded">
+        Loaded="Window_Loaded" Icon="/app.png">
 
     <Window.Resources>
         <!-- 微信绿色主题 -->
