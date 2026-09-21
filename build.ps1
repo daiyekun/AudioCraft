@@ -19,6 +19,18 @@ if ($LASTEXITCODE -ne 0) { throw "Clean failed" }
 dotnet publish -c Release -r win-x64 --self-contained true -p:PublishSingleFile=true -p:IncludeNativeLibrariesForSelfExtract=true
 if ($LASTEXITCODE -ne 0) { throw "Publish failed" }
 
+# Copy tools directory
+Write-Host "Copying tools directory..." -ForegroundColor Yellow
+$publishDir = "AudioCraft\bin\Release\net10.0-windows\win-x64\publish"
+$toolsSource = "AudioCraft\tools"
+$toolsDest = "$publishDir\tools"
+
+if (Test-Path $toolsDest) {
+    Remove-Item -Recurse -Force $toolsDest
+}
+Copy-Item -Path $toolsSource -Destination $toolsDest -Recurse
+Write-Host "Tools directory copied!" -ForegroundColor Green
+
 Write-Host "Build completed!" -ForegroundColor Green
 Write-Host ""
 

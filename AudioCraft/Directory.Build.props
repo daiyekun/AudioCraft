@@ -1,0 +1,8 @@
+<Project>
+  <ItemGroup>
+    <ContentWithTargetPath Include="tools\**\*">
+      <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
+      <TargetPath>tools\%(RecursiveDir)%(Filename)%(Extension)</TargetPath>
+    </ContentWithTargetPath>
+  </ItemGroup>
+</Project>
