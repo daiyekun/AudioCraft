@@ -37,6 +37,28 @@ namespace AudioCraft
             try
             {
                 Log("程序已启动，请选择源文件目录和输出目录");
+                AdjustColumnWidths();
+            }
+            catch { }
+        }
+
+        private void Window_SizeChanged(object sender, SizeChangedEventArgs e)
+        {
+            AdjustColumnWidths();
+        }
+
+        private void AdjustColumnWidths()
+        {
+            try
+            {
+                if (lstFiles.View is GridView gridView && gridView.Columns.Count > 0)
+                {
+                    var availableWidth = lstFiles.ActualWidth - 290;
+                    if (availableWidth > 100)
+                    {
+                        gridView.Columns[0].Width = availableWidth;
+                    }
+                }
             }
             catch { }
         }
@@ -221,7 +243,7 @@ namespace AudioCraft
                     if (success)
                     {
                         file.Status = "已完成";
-                        file.StatusBrush = new SolidColorBrush(Color.FromRgb(0, 255, 136));
+                        file.StatusBrush = new SolidColorBrush(Color.FromRgb(7, 193, 96));
                         file.Progress = 100;
                         successCount++;
                         Log($"✓ 转换成功: {file.FileName}");

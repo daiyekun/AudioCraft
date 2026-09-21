@@ -5,14 +5,14 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:AudioCraft"
         mc:Ignorable="d"
-        Title="小胖子专属工具 - 音频格式转换器" Height="850" Width="900"
+        Title="小胖子专属工具 - 音频格式转换器" Height="850" Width="1000"
         WindowStartupLocation="CenterScreen"
         Background="#f5f5f5"
         AllowDrop="True"
         Drop="Window_Drop"
         DragEnter="Window_DragEnter"
         DragLeave="Window_DragLeave"
-        Loaded="Window_Loaded" Icon="/app.png">
+        Loaded="Window_Loaded" Icon="/app.png" SizeChanged="Window_SizeChanged">
 
     <Window.Resources>
         <!-- 微信绿色主题 -->
@@ -266,7 +266,7 @@
                                         </Setter>
                                     </Style>
                                 </GridView.ColumnHeaderContainerStyle>
-                                <GridViewColumn Header="文件名" Width="300">
+                                <GridViewColumn Header="文件名" Width="200">
                                     <GridViewColumn.CellTemplate>
                                         <DataTemplate>
                                             <TextBlock Text="{Binding FileName}" 
@@ -277,7 +277,7 @@
                                         </DataTemplate>
                                     </GridViewColumn.CellTemplate>
                                 </GridViewColumn>
-                                <GridViewColumn Header="大小" Width="80">
+                                <GridViewColumn Header="大小" Width="60">
                                     <GridViewColumn.CellTemplate>
                                         <DataTemplate>
                                             <TextBlock Text="{Binding FileSize}" 
@@ -287,7 +287,7 @@
                                         </DataTemplate>
                                     </GridViewColumn.CellTemplate>
                                 </GridViewColumn>
-                                <GridViewColumn Header="状态" Width="100">
+                                <GridViewColumn Header="状态" Width="70">
                                     <GridViewColumn.CellTemplate>
                                         <DataTemplate>
                                             <TextBlock Text="{Binding Status}" 
@@ -297,7 +297,7 @@
                                         </DataTemplate>
                                     </GridViewColumn.CellTemplate>
                                 </GridViewColumn>
-                                <GridViewColumn Header="进度" Width="150">
+                                <GridViewColumn Header="进度" Width="100">
                                     <GridViewColumn.CellTemplate>
                                         <DataTemplate>
                                             <StackPanel Margin="0,6,8,6">
@@ -428,7 +428,7 @@
                                 <Button Style="{StaticResource SecondaryButton}" 
                                         Click="BtnChangeOutput_Click"
                                         Margin="0,0,8,0">
-                                    <TextBlock Text="另存为" FontSize="13"/>
+                                    <TextBlock Text="选择目录" FontSize="13"/>
                                 </Button>
                                 <Button Style="{StaticResource SecondaryButton}" 
                                         Click="BtnOpenOutput_Click">
