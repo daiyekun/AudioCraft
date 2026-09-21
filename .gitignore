@@ -1,0 +1,25 @@
+# .NET
+bin/
+obj/
+*.user
+*.suo
+*.log
+.vs/
+
+# 编译产物与外部工具
+AudioCraft/bin/
+AudioCraft/obj/
+# ffmpeg 二进制文件，不提交
+AudioCraft/bin/Debug/net10.0-windows/tools/ffmpeg.exe
+
+# IDE
+.idea/
+.vscode/
+
+# 临时文件
+*.tmp
+
+# Visual Studio
+.vs/
+*.suo
+*.user
